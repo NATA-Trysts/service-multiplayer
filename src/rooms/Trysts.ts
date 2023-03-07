@@ -13,6 +13,8 @@ export class Trysts extends Room<WorldState> {
   dispatcher = new Dispatcher(this)
 
   async onCreate(options: any) {
+    this.roomId = await options.spaceId
+
     this.setState(new WorldState())
 
     this.onMessage(MESSAGES.MEMBER.MOVE, (client, data) => {

@@ -1,5 +1,4 @@
 import { Command } from '@colyseus/command'
-import { getRandomInt } from '../../utils'
 import { Trysts } from '../Trysts'
 import { Member, Vector3, Vector4 } from '../schema/WorldState'
 
@@ -12,9 +11,9 @@ export class MemberCreateCommand extends Command<
   }
 > {
   execute(payload: this['payload']) {
-    const x = getRandomInt(4)
-    const y = INITIAL_Y_AXES
-    const z = getRandomInt(5)
+    const x = 0
+    const y = INITIAL_Y_AXES - 2
+    const z = 0
     this.state.members.set(
       payload.sessionId,
       new Member(payload.sessionId, { x, y, z }, { x: 0, y: 0, z: 0, w: 0 })
