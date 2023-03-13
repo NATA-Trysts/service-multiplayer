@@ -12,7 +12,7 @@ export class MemberCreateCommand extends Command<
 > {
   execute(payload: this['payload']) {
     const x = 0
-    const y = INITIAL_Y_AXES - 2
+    const y = INITIAL_Y_AXES
     const z = 0
     this.state.members.set(
       payload.sessionId,
@@ -62,3 +62,4 @@ export class MemberActionCommand extends Command<
     member.action = payload.action
   }
 }
+
