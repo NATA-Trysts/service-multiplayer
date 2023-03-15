@@ -1,5 +1,6 @@
 import { Dispatcher } from '@colyseus/command'
 import { Client, Room } from 'colyseus'
+import { MemberSendMessageCommand } from './commands/ChatUpdateCommand'
 import {
   MemberActionCommand,
   MemberCreateCommand,
@@ -28,6 +29,18 @@ export class Trysts extends Room<WorldState> {
       this.dispatcher.dispatch(new MemberActionCommand(), {
         sessionId: client.sessionId,
         action: data.action,
+      })
+    })
+
+    this.onMessage(MESSAGES.MEMBER.SEND_MESSAGE, (client, data) => {
+      console.log(`--> ${client.sessionId} send message!`)
+
+      this.dispatcher.dispatch(new MemberSendMessageCommand(), {
+        sessionId: client.sessionId,
+        senderName: data.name,
+        avatar: data.avatar,
+        timestamp: data.timestamp,
+        content: data.content,
       })
     })
   }
