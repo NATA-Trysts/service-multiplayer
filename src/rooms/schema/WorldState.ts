@@ -70,7 +70,35 @@ export class Member extends Schema {
   }
 }
 
+export class MemberMessage extends Schema {
+  @type('string') id: string
+  @type('string') sessionId: string
+  @type('string') name: string
+  @type('string') avatar: string
+  @type('number') timestamp: number
+  @type('string') content: string
+
+  constructor(
+    id: string,
+    sessionId: string,
+    name: string,
+    avatar: string,
+    timestamp: number,
+    content: string
+  ) {
+    super()
+    this.id = id
+    this.sessionId = sessionId
+    this.name = name
+    this.avatar = avatar
+    this.timestamp = timestamp
+    this.content = content
+  }
+}
+
 export class WorldState extends Schema {
   @type({ map: Member })
   members = new MapSchema<Member>()
+  @type({ map: MemberMessage })
+  messages = new MapSchema<MemberMessage>()
 }
