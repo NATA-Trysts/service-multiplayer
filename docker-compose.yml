@@ -1,0 +1,9 @@
+version: "3.2"
+
+services:
+  multiplayer:
+    build: .
+    env_file: docker-compose.env
+    ports:
+      - "8080:2567"
+    command: 'npm start'
