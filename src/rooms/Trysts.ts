@@ -12,9 +12,11 @@ import { WorldState } from './schema/WorldState'
 
 export class Trysts extends Room<WorldState> {
   dispatcher = new Dispatcher(this)
+  peerId = ''
 
   async onCreate(options: any) {
     this.roomId = await options.spaceId
+    if (options.peerId) this.peerId = options.peerId
 
     this.setState(new WorldState())
 
@@ -46,9 +48,10 @@ export class Trysts extends Room<WorldState> {
   }
 
   onJoin(client: Client, options?: any, auth?: any): void | Promise<any> {
-    console.log(`--> ${client.sessionId} joined!`)
+    console.log(`--> ${client.sessionId} joined! peerId: ${options.peerId}`)
 
     this.dispatcher.dispatch(new MemberCreateCommand(), {
+      peerId: options.peerId || this.peerId,
       sessionId: client.sessionId,
     })
   }
@@ -65,3 +68,4 @@ export class Trysts extends Room<WorldState> {
     this.dispatcher.stop()
   }
 }
+

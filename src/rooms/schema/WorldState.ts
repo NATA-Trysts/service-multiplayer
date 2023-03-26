@@ -56,14 +56,16 @@ export class Quaternion extends Schema implements Vector4 {
 
 export class Member extends Schema {
   @type('string') id: string
+  @type('string') peerId: string
   @type(Position) position: Position
   @type(Quaternion) quaternion: Quaternion
   @type('string') action: string
   @type('number') placeholderForChange = 0
 
-  constructor(id: string, position: Vector3, quaternion: Vector4) {
+  constructor(id: string, peerId: string, position: Vector3, quaternion: Vector4) {
     super()
     this.id = id
+    this.peerId = peerId
     this.position = new Position(position)
     this.quaternion = new Quaternion(quaternion)
     this.action = 'idle'
@@ -102,3 +104,4 @@ export class WorldState extends Schema {
   @type({ map: MemberMessage })
   messages = new MapSchema<MemberMessage>()
 }
+

@@ -7,6 +7,7 @@ const INITIAL_Y_AXES = 0
 export class MemberCreateCommand extends Command<
   Trysts,
   {
+    peerId: string
     sessionId: string
   }
 > {
@@ -16,7 +17,7 @@ export class MemberCreateCommand extends Command<
     const z = 0
     this.state.members.set(
       payload.sessionId,
-      new Member(payload.sessionId, { x, y, z }, { x: 0, y: 0, z: 0, w: 0 })
+      new Member(payload.sessionId, payload.peerId, { x, y, z }, { x: 0, y: 0, z: 0, w: 0 })
     )
   }
 }
