@@ -3,6 +3,7 @@ import { Client, Room } from 'colyseus'
 import { MemberSendMessageCommand } from './commands/ChatUpdateCommand'
 import {
   MemberActionCommand,
+  MemberChangeNickNameCommand,
   MemberCreateCommand,
   MemberLeaveCommand,
   MemberMoveCommand,
@@ -45,6 +46,15 @@ export class Trysts extends Room<WorldState> {
         content: data.content,
       })
     })
+
+    this.onMessage(MESSAGES.MEMBER.CHANGE_NICKNAME, (client, data) => {
+      console.log(`--> ${client.sessionId} change nickname to ${data.nickname}!`)
+
+      this.dispatcher.dispatch(new MemberChangeNickNameCommand(), {
+        sessionId: client.sessionId,
+        nickname: data.nickname,
+      })
+    })
   }
 
   onJoin(client: Client, options?: any, auth?: any): void | Promise<any> {
@@ -53,6 +63,7 @@ export class Trysts extends Room<WorldState> {
     this.dispatcher.dispatch(new MemberCreateCommand(), {
       peerId: options.peerId || this.peerId,
       sessionId: client.sessionId,
+      user: options.user,
     })
   }
 
@@ -68,4 +79,3 @@ export class Trysts extends Room<WorldState> {
     this.dispatcher.stop()
   }
 }
-
