@@ -83,6 +83,6 @@ export class MemberChangeNameCommand extends Command<
 > {
   execute(payload: this['payload']) {
     const member = this.state.members.get(payload.sessionId)
-    member.user.name = payload.name
+    member.user.username = payload.name
   }
 }

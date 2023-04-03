@@ -56,21 +56,21 @@ export class Quaternion extends Schema implements Vector4 {
 
 export class User extends Schema {
   @type('string') userId: string
-  @type('string') name: string
+  @type('string') username: string
   @type('string') handler: string
   @type('string') avatar: string
 
   constructor(user: User) {
     super()
     this.userId = user.userId
-    this.name = user.name
+    this.username = user.username
     this.handler = user.handler
     this.avatar = user.avatar
   }
 
-  set(user: { userId: string; name: string; handler: string; avatar: string }) {
+  set(user: { userId: string; username: string; handler: string; avatar: string }) {
     this.userId = user.userId
-    this.name = user.name
+    this.username = user.username
     this.handler = user.handler
     this.avatar = user.avatar
   }
