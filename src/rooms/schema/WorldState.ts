@@ -54,18 +54,42 @@ export class Quaternion extends Schema implements Vector4 {
   }
 }
 
+export class User extends Schema {
+  @type('string') userId: string
+  @type('string') name: string
+  @type('string') handler: string
+  @type('string') avatar: string
+
+  constructor(user: User) {
+    super()
+    this.userId = user.userId
+    this.name = user.name
+    this.handler = user.handler
+    this.avatar = user.avatar
+  }
+
+  set(user: { userId: string; name: string; handler: string; avatar: string }) {
+    this.userId = user.userId
+    this.name = user.name
+    this.handler = user.handler
+    this.avatar = user.avatar
+  }
+}
+
 export class Member extends Schema {
   @type('string') id: string
   @type('string') peerId: string
+  @type(User) user: User
   @type(Position) position: Position
   @type(Quaternion) quaternion: Quaternion
   @type('string') action: string
   @type('number') placeholderForChange = 0
 
-  constructor(id: string, peerId: string, position: Vector3, quaternion: Vector4) {
+  constructor(id: string, peerId: string, user: User, position: Vector3, quaternion: Vector4) {
     super()
     this.id = id
     this.peerId = peerId
+    this.user = new User(user)
     this.position = new Position(position)
     this.quaternion = new Quaternion(quaternion)
     this.action = 'idle'
@@ -104,4 +128,3 @@ export class WorldState extends Schema {
   @type({ map: MemberMessage })
   messages = new MapSchema<MemberMessage>()
 }
-
