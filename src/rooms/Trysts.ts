@@ -46,6 +46,18 @@ export class Trysts extends Room<WorldState> {
       })
     })
 
+    this.onMessage(MESSAGES.WHITEBOARD.HOST_OPEN, (client) => {
+      console.log(`--> ${client.sessionId} opening white board`)
+
+      this.broadcast(MESSAGES.WHITEBOARD.HOST_OPEN)
+    })
+
+    this.onMessage(MESSAGES.WHITEBOARD.HOST_CLOSE, (client) => {
+      console.log(`--> ${client.sessionId} closed white board`)
+
+      this.broadcast(MESSAGES.WHITEBOARD.HOST_CLOSE)
+    })
+
     this.onMessage(MESSAGES.WHITEBOARD.JOIN, (client, data) => {
       console.log(`--> ${client.sessionId} joined white board`)
 

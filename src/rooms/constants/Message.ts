@@ -7,6 +7,8 @@ export const MESSAGES = {
   },
   WORLD: {},
   WHITEBOARD: {
+    HOST_OPEN: 'host-open-white-board',
+    HOST_CLOSE: 'host-close-white-board',
     JOIN: 'member-join-white-board',
     LEAVE: 'member-leave-white-board',
   },
