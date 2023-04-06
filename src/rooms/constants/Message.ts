@@ -6,4 +6,9 @@ export const MESSAGES = {
     SEND_MESSAGE: 'member-send-message',
   },
   WORLD: {},
+  WHITEBOARD: {
+    JOIN: 'member-join-white-board',
+    LEAVE: 'member-leave-white-board',
+  },
 }
+

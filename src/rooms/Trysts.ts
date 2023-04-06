@@ -45,6 +45,22 @@ export class Trysts extends Room<WorldState> {
         content: data.content,
       })
     })
+
+    this.onMessage(MESSAGES.WHITEBOARD.JOIN, (client, data) => {
+      console.log(`--> ${client.sessionId} joined white board`)
+
+      this.broadcast(MESSAGES.WHITEBOARD.JOIN, {
+        member: data.member,
+      })
+    })
+
+    this.onMessage(MESSAGES.WHITEBOARD.LEAVE, (client, data) => {
+      console.log(`--> ${client.sessionId} left white board`)
+
+      this.broadcast(MESSAGES.WHITEBOARD.LEAVE, {
+        member: data.member,
+      })
+    })
   }
 
   onJoin(client: Client, options?: any, auth?: any): void | Promise<any> {
