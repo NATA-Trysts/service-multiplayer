@@ -68,7 +68,7 @@ export class Member extends Schema {
     this.peerId = peerId
     this.position = new Position(position)
     this.quaternion = new Quaternion(quaternion)
-    this.action = 'idle'
+    this.action = 'idle.000'
   }
 }
 
@@ -104,4 +104,3 @@ export class WorldState extends Schema {
   @type({ map: MemberMessage })
   messages = new MapSchema<MemberMessage>()
 }
-
