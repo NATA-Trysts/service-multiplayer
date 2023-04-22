@@ -3,22 +3,27 @@ import { Client, Room } from 'colyseus'
 import { MemberSendMessageCommand } from './commands/ChatUpdateCommand'
 import {
   MemberActionCommand,
+  MemberChangeAvatarCommand,
   MemberCreateCommand,
   MemberLeaveCommand,
   MemberMoveCommand,
 } from './commands/MemberUpdateCommand'
 import { MESSAGES } from './constants/Message'
-import { WorldState } from './schema/WorldState'
+import { UserInformationType, WorldState } from './schema/WorldState'
 
 export class Trysts extends Room<WorldState> {
   dispatcher = new Dispatcher(this)
   peerId = ''
+  user: UserInformationType
 
   async onCreate(options: any) {
     this.roomId = await options.spaceId
     if (options.peerId) this.peerId = options.peerId
+    if (options.user) this.user = options.user
 
     this.setState(new WorldState())
+
+    //#region
 
     this.onMessage(MESSAGES.MEMBER.MOVE, (client, data) => {
       this.dispatcher.dispatch(new MemberMoveCommand(), {
@@ -43,6 +48,15 @@ export class Trysts extends Room<WorldState> {
         avatar: data.avatar,
         timestamp: data.timestamp,
         content: data.content,
+      })
+    })
+
+    this.onMessage(MESSAGES.MEMBER.CHANGE_AVATAR, (client, data) => {
+      console.log(`--> ${client.sessionId} opening white board`)
+
+      this.dispatcher.dispatch(new MemberChangeAvatarCommand(), {
+        sessionId: client.sessionId,
+        avatar: data.avatar,
       })
     })
 
@@ -73,6 +87,8 @@ export class Trysts extends Room<WorldState> {
         member: data.member,
       })
     })
+
+    //#endregion
   }
 
   onJoin(client: Client, options?: any, auth?: any): void | Promise<any> {
@@ -81,6 +97,7 @@ export class Trysts extends Room<WorldState> {
     this.dispatcher.dispatch(new MemberCreateCommand(), {
       peerId: options.peerId || this.peerId,
       sessionId: client.sessionId,
+      user: options.user || this.user,
     })
   }
 
@@ -96,4 +113,3 @@ export class Trysts extends Room<WorldState> {
     this.dispatcher.stop()
   }
 }
-

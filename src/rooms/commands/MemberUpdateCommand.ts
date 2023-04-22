@@ -1,6 +1,13 @@
 import { Command } from '@colyseus/command'
 import { Trysts } from '../Trysts'
-import { Member, Vector3, Vector4 } from '../schema/WorldState'
+import {
+  Avatar,
+  Member,
+  UserInformation,
+  UserInformationType,
+  Vector3,
+  Vector4,
+} from '../schema/WorldState'
 
 const INITIAL_Y_AXES = 0
 
@@ -9,6 +16,7 @@ export class MemberCreateCommand extends Command<
   {
     peerId: string
     sessionId: string
+    user: UserInformationType
   }
 > {
   execute(payload: this['payload']) {
@@ -17,7 +25,13 @@ export class MemberCreateCommand extends Command<
     const z = 0
     this.state.members.set(
       payload.sessionId,
-      new Member(payload.sessionId, payload.peerId, { x, y, z }, { x: 0, y: 0, z: 0, w: 0 })
+      new Member(
+        payload.sessionId,
+        payload.peerId,
+        { x, y, z },
+        { x: 0, y: 0, z: 0, w: 0 },
+        payload.user
+      )
     )
   }
 }
@@ -64,3 +78,14 @@ export class MemberActionCommand extends Command<
   }
 }
 
+export class MemberChangeAvatarCommand extends Command<
+  Trysts,
+  {
+    sessionId: string
+    avatar: string
+  }
+> {
+  execute(payload: this['payload']) {
+    this.state.members.get(payload.sessionId).setAvatar(payload.avatar)
+  }
+}

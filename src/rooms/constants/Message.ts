@@ -4,6 +4,7 @@ export const MESSAGES = {
     MOVE: 'member-move',
     ACTION: 'member-action',
     SEND_MESSAGE: 'member-send-message',
+    CHANGE_AVATAR: 'member-change-avatar',
   },
   WORLD: {},
   WHITEBOARD: {
@@ -13,4 +14,3 @@ export const MESSAGES = {
     LEAVE: 'member-leave-white-board',
   },
 }
-
