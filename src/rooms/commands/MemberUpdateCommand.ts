@@ -17,6 +17,7 @@ export class MemberCreateCommand extends Command<
     peerId: string
     sessionId: string
     user: UserInformationType
+    isHost: boolean
   }
 > {
   execute(payload: this['payload']) {
@@ -30,7 +31,8 @@ export class MemberCreateCommand extends Command<
         payload.peerId,
         { x, y, z },
         { x: 0, y: 0, z: 0, w: 0 },
-        payload.user
+        payload.user,
+        payload.isHost
       )
     )
   }

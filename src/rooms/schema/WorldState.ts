@@ -1,4 +1,4 @@
-import { ArraySchema, MapSchema, Schema, type } from '@colyseus/schema'
+import { ArraySchema, CollectionSchema, MapSchema, Schema, type } from '@colyseus/schema'
 
 export type Vector3 = {
   x: number
@@ -151,6 +151,8 @@ export class Member extends Schema {
   @type(Quaternion) quaternion: Quaternion
   @type('string') action: string
   @type('number') placeholderForChange = 0
+  @type('boolean') isHost: boolean
+
   @type(UserInformation) user: UserInformation
 
   constructor(
@@ -158,7 +160,8 @@ export class Member extends Schema {
     peerId: string,
     position: Vector3,
     quaternion: Vector4,
-    user: UserInformationType
+    user: UserInformationType,
+    isHost: boolean
   ) {
     super()
     this.id = id
@@ -167,6 +170,7 @@ export class Member extends Schema {
     this.quaternion = new Quaternion(quaternion)
     this.action = 'idle.000'
     this.user = new UserInformation(user)
+    this.isHost = isHost
   }
 
   setAvatar(avatar: string) {
@@ -200,9 +204,34 @@ export class MemberMessage extends Schema {
   }
 }
 
+export class WhiteBoard extends Schema {
+  @type('string') id: string
+  @type({ collection: 'string' }) members: CollectionSchema<String>
+
+  constructor(id: string, members: string[]) {
+    super()
+    this.id = id
+    this.members = new CollectionSchema<String>(members)
+  }
+
+  addMember(id: string) {
+    console.log('add', id)
+
+    this.members.add(id)
+  }
+
+  removeMember(id: string) {
+    this.members.delete(id)
+  }
+}
+
 export class WorldState extends Schema {
   @type({ map: Member })
   members = new MapSchema<Member>()
   @type({ map: MemberMessage })
   messages = new MapSchema<MemberMessage>()
+  @type({ map: WhiteBoard })
+  whiteboards = new MapSchema<WhiteBoard>()
+  @type('boolean')
+  isHostWhiteBoardOpen: boolean = false
 }
