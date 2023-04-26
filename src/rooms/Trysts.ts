@@ -10,6 +10,12 @@ import {
 } from './commands/MemberUpdateCommand'
 import { MESSAGES } from './constants/Message'
 import { UserInformationType, WorldState } from './schema/WorldState'
+import {
+  MemberJoinWhiteBoardCommand,
+  MemberLeaveWhiteBoardCommand,
+  WhiteBoardCloseCommand,
+  WhiteBoardOpenCommand,
+} from './commands/WhiteBoardUpdateCommand'
 
 export class Trysts extends Room<WorldState> {
   dispatcher = new Dispatcher(this)
@@ -24,6 +30,7 @@ export class Trysts extends Room<WorldState> {
     this.setState(new WorldState())
 
     //#region
+    this.state.listen('isHostWhiteBoardOpen', (value) => {})
 
     this.onMessage(MESSAGES.MEMBER.MOVE, (client, data) => {
       this.dispatcher.dispatch(new MemberMoveCommand(), {
@@ -60,31 +67,38 @@ export class Trysts extends Room<WorldState> {
       })
     })
 
-    this.onMessage(MESSAGES.WHITEBOARD.HOST_OPEN, (client) => {
-      console.log(`--> ${client.sessionId} opening white board`)
+    this.onMessage(MESSAGES.WHITEBOARD.HOST_OPEN, (client, data) => {
+      console.log(`--> ${client.sessionId} opening white board ${data.whiteboardId}`)
 
-      this.broadcast(MESSAGES.WHITEBOARD.HOST_OPEN)
+      this.dispatcher.dispatch(new WhiteBoardOpenCommand(), {
+        whiteboardId: data.whiteboardId,
+        members: [client.sessionId],
+      })
     })
 
-    this.onMessage(MESSAGES.WHITEBOARD.HOST_CLOSE, (client) => {
-      console.log(`--> ${client.sessionId} closed white board`)
+    this.onMessage(MESSAGES.WHITEBOARD.HOST_CLOSE, (client, data) => {
+      console.log(`--> ${client.sessionId} closed white board ${data.whiteboardId}`)
 
-      this.broadcast(MESSAGES.WHITEBOARD.HOST_CLOSE)
+      this.dispatcher.dispatch(new WhiteBoardCloseCommand(), {
+        whiteboardId: data.whiteboardId,
+      })
     })
 
     this.onMessage(MESSAGES.WHITEBOARD.JOIN, (client, data) => {
-      console.log(`--> ${client.sessionId} joined white board`)
+      console.log(`--> ${client.sessionId} joined white board ${data.whiteboardId}`)
 
-      this.broadcast(MESSAGES.WHITEBOARD.JOIN, {
-        member: data.member,
+      this.dispatcher.dispatch(new MemberJoinWhiteBoardCommand(), {
+        memberId: client.sessionId,
+        whiteboardId: data.whiteboardId,
       })
     })
 
     this.onMessage(MESSAGES.WHITEBOARD.LEAVE, (client, data) => {
-      console.log(`--> ${client.sessionId} left white board`)
+      console.log(`--> ${client.sessionId} left white board ${data.whiteboardId}`)
 
-      this.broadcast(MESSAGES.WHITEBOARD.LEAVE, {
-        member: data.member,
+      this.dispatcher.dispatch(new MemberLeaveWhiteBoardCommand(), {
+        memberId: client.sessionId,
+        whiteboardId: data.whiteboardId,
       })
     })
 
@@ -94,10 +108,13 @@ export class Trysts extends Room<WorldState> {
   onJoin(client: Client, options?: any, auth?: any): void | Promise<any> {
     console.log(`--> ${client.sessionId} joined! peerId: ${options.peerId}`)
 
+    console.log(options)
+
     this.dispatcher.dispatch(new MemberCreateCommand(), {
       peerId: options.peerId || this.peerId,
       sessionId: client.sessionId,
       user: options.user || this.user,
+      isHost: options.isHost,
     })
   }
 
