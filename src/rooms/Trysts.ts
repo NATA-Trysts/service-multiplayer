@@ -16,6 +16,10 @@ import {
   WhiteBoardCloseCommand,
   WhiteBoardOpenCommand,
 } from './commands/WhiteBoardUpdateCommand'
+import {
+  CloseScreenShareCommand,
+  OpenScreenShareCommand,
+} from './commands/ScreenShareUpdateCommand'
 
 export class Trysts extends Room<WorldState> {
   dispatcher = new Dispatcher(this)
@@ -99,6 +103,23 @@ export class Trysts extends Room<WorldState> {
       this.dispatcher.dispatch(new MemberLeaveWhiteBoardCommand(), {
         memberId: client.sessionId,
         whiteboardId: data.whiteboardId,
+      })
+    })
+
+    this.onMessage(MESSAGES.SCREENSHARE.OPEN, (client, data) => {
+      console.log(`--> ${client.sessionId} open screen share`, data)
+
+      this.dispatcher.dispatch(new OpenScreenShareCommand(), {
+        furnitureIframeId: data.furnitureIframeId,
+        screenSharePeerId: data.screenSharePeerId,
+      })
+    })
+
+    this.onMessage(MESSAGES.SCREENSHARE.CLOSE, (client, data) => {
+      console.log(`--> ${client.sessionId} close screen share `, data)
+
+      this.dispatcher.dispatch(new CloseScreenShareCommand(), {
+        furnitureIframeId: data.furnitureIframeId,
       })
     })
 

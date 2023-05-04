@@ -13,4 +13,8 @@ export const MESSAGES = {
     JOIN: 'member-join-white-board',
     LEAVE: 'member-leave-white-board',
   },
+  SCREENSHARE: {
+    OPEN: 'open-screen-share',
+    CLOSE: 'close-screen-share',
+  },
 }
