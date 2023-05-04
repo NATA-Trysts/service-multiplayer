@@ -225,6 +225,16 @@ export class WhiteBoard extends Schema {
   }
 }
 
+export class FurnitureScreenShare extends Schema {
+  @type('string') furnitureIframeId: string
+  @type('string') screenSharePeerId: string
+  constructor(furnitureIframeId: string, screenSharePeerId: string) {
+    super()
+    this.furnitureIframeId = furnitureIframeId
+    this.screenSharePeerId = screenSharePeerId
+  }
+}
+
 export class WorldState extends Schema {
   @type({ map: Member })
   members = new MapSchema<Member>()
@@ -232,6 +242,8 @@ export class WorldState extends Schema {
   messages = new MapSchema<MemberMessage>()
   @type({ map: WhiteBoard })
   whiteboards = new MapSchema<WhiteBoard>()
+  @type({ map: FurnitureScreenShare })
+  screenShares = new MapSchema<FurnitureScreenShare>()
   @type('boolean')
   isHostWhiteBoardOpen: boolean = false
 }
